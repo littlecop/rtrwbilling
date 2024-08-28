@@ -1,0 +1,33 @@
+<?php
+require '../koneksi.php';
+setlocale(LC_ALL, 'id_ID');
+session_start();
+date_default_timezone_set('Asia/Jakarta');
+$waktusekarang = date("d-m-Y H:i:s");
+
+
+$id_user = $_POST['id_user'];
+$created_at = $_POST['created_at'];
+$nama = $_POST['nama'];
+$paket = $_POST['paket'];
+$harga = $_POST['harga'];
+$bayar = $_POST['bayar'];
+$periode_tagihan = $_POST['periode_tagihan'];
+$newPeriodeTagihan = date('d-m-Y', strtotime($periode_tagihan));
+$bulanTagihan = date('m', strtotime($periode_tagihan));
+$tahunTagihan = date('Y', strtotime($periode_tagihan));
+$metode_bayar = $_POST['metode_bayar'];
+$note = $_POST['note'];
+$status_bayar = $_POST['status_bayar'];
+
+
+echo $status_bayar;
+
+$query = mysqli_query($conn, "INSERT INTO erp_payment VALUES(UUID(),'$id_user','$nama','$paket','$newPeriodeTagihan','$bulanTagihan','$tahunTagihan','$harga','$bayar','$metode_bayar','$note','$created_at','$status_bayar')");
+if(mysqli_affected_rows($conn) > 0 ) {
+    $_SESSION["sukses"] = 'Pembayaran berhasil dibuat';
+    header('Location: ../?page=createPayment');
+}else {
+    $_SESSION["gagal"] = 'Pembayaran gagal dibuat';
+    header('Location: ../?page=createPayment');
+}
